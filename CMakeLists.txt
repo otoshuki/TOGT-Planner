@@ -17,8 +17,10 @@ FetchContent_Declare(
   GIT_TAG "master"
   GIT_SHALLOW "TRUE"
   SYSTEM FIND_PACKAGE_ARGS "NAMES;RapidJSON;CONFIG;1.1.0")
-
+  
+set(RAPIDJSON_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(RapidJSON)
+
 add_definitions(-DEIGEN_STACK_ALLOCATION_LIMIT=1048576)
 
 add_library(${PROJECT_NAME})
@@ -106,6 +108,11 @@ target_sources(
           src/type/quad_state.cpp
           src/utils/logger.cpp
           src/utils/timer.cpp)
+          
+target_include_directories(${PROJECT_NAME}
+  SYSTEM PUBLIC ${rapidjson_SOURCE_DIR}/include
+)
+
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
 if(TOGT_FORCE_SCALAR_FIRST_QUATERNION)
   target_compile_definitions(${PROJECT_NAME}
@@ -114,8 +121,7 @@ endif(TOGT_FORCE_SCALAR_FIRST_QUATERNION)
 
 target_link_libraries(
   ${PROJECT_NAME}
-  PUBLIC Eigen3::Eigen
-  PRIVATE "$<COMPILE_ONLY:rapidjson>")
+  PUBLIC Eigen3::Eigen)
 
 include(CTest)
 if(BUILD_TESTING)

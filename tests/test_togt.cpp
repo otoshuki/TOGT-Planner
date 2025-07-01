@@ -10,13 +10,14 @@ class TrajPlannerTest : public ::testing::Test {
   std::shared_ptr<RaceTrack> racetrack;
   std::shared_ptr<RacePlanner> raceplanner;
   std::shared_ptr<RaceParams> raceparams;
-  const std::string quad_name = "cpc";
+  const std::string quad_name = "crazyflie";
   const std::string config_name = quad_name + "_setups.yaml";
-  const std::string track_name = "race_uzh_7g_multiprisma.yaml";
+  // const std::string track_name = "race_uzh_7g_multiprisma.yaml";
+  const std::string track_name = "customtrack.yaml";
   // const std::string track_name = "race_uzh_19wp.yaml";
 
-  const std::string traj_name ="togt_traj.csv";
-  const std::string wpt_name ="togt_wpt.yaml";
+  const std::string traj_name ="crazyflie_traj.csv";
+  const std::string wpt_name ="crazyflie_wpt.yaml";
 };
 
 TEST_F(TrajPlannerTest, planTraj) {
@@ -39,4 +40,3 @@ TEST_F(TrajPlannerTest, planTraj) {
   traj.save(traj_path);
   traj.saveSegments(wpt_path, 1);
 }
-

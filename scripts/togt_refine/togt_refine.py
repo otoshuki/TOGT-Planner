@@ -11,10 +11,10 @@ from optimization import Optimization
 from quadrotor import Quadrotor
 from trajectory import Trajectory
 import csv
+
 def save_traj(res, opt: Optimization, csv_f):
     with open(csv_f, 'w') as f:
         traj_writer = csv.writer(f, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-        #TODO: modify it to match the agilicious format csv
         labels = ['t',
                   "p_x", "p_y", "p_z",
                   "v_x", "v_y", "v_z",
@@ -27,7 +27,7 @@ def save_traj(res, opt: Optimization, csv_f):
                   "snap_x", "snap_y", "snap_z"]
         traj_writer.writerow(labels)
         x = res['x'].full().flatten()
-        
+
         t = 0
         s = opt._xinit
         u = x[opt._Horizon*opt._X_dim: opt._Horizon*opt._X_dim+opt._U_dim]
@@ -56,9 +56,9 @@ def save_traj(res, opt: Optimization, csv_f):
         print("--------------------------")
         print("lap time: ", t)
 
-def refine(quad, planner, tol, tol_term, desired_dt):
-    quad = Quadrotor(ROOTPATH+'/parameters/'+quad+'/'+quad+'_quad.yaml')
-    togt = Trajectory(desired_dt, ROOTPATH+"/resources/trajectory/"+planner+"_traj.csv", ROOTPATH+"/resources/trajectory/"+planner+"_wpt.yaml")
+def refine(quad_name, tol, tol_term, desired_dt):
+    quad = Quadrotor(ROOTPATH+'/parameters/'+quad_name+'/'+quad_name+'_quad.yaml')
+    togt = Trajectory(desired_dt, ROOTPATH+"/resources/trajectory/"+quad_name+"_traj.csv", ROOTPATH+"/resources/trajectory/"+quad_name+"_wpt.yaml")
     togt.print()
 
     wp_opt = Optimization(quad, togt._wpt_num, togt._Ns, tol, tol_term)
@@ -70,12 +70,11 @@ def refine(quad, planner, tol, tol_term, desired_dt):
     wp_opt.define_opt_t()
     res_t = wp_opt.solve_opt_t(togt._xinit, togt._xend, np.array(togt._waypoints).flatten())
 
-    save_traj(res_t, wp_opt, ROOTPATH+"/resources/trajectory/"+planner+"_refined_traj.csv")
+    save_traj(res_t, wp_opt, ROOTPATH+"/resources/trajectory/"+quad_name+"_refined_traj.csv")
 
 if __name__ == "__main__":
-    quad = 'cpc'
-    planner = 'togt'
-    tol= 0.01
-    tol_term = 0.05
-    desired_dt = 0.02
-    refine(quad, planner, tol, tol_term, desired_dt)
+    quad = 'crazyflie'
+    tol= 0.001
+    tol_term = 0.001
+    desired_dt = 1/100
+    refine(quad, tol, tol_term, desired_dt)

@@ -1,3 +1,4 @@
+# Refine
 memorySize:         256
 past:               16
 minStep:            1.0e-32

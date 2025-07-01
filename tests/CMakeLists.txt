@@ -8,7 +8,7 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(GTest)
 include(GoogleTest)
 add_executable(tests)
-target_sources(tests PRIVATE test_aos.cpp test_aos_togt.cpp test_togt.cpp)
+target_sources(tests PRIVATE test_togt.cpp)
 target_compile_definitions(tests PRIVATE PROJECT_ROOT="${CMAKE_SOURCE_DIR}")
 target_link_libraries(tests PRIVATE GTest::gtest GTest::gtest_main
                                     ${CMAKE_PROJECT_NAME})

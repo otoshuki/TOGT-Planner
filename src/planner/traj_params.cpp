@@ -113,5 +113,3 @@ std::ostream& operator<<(std::ostream& os, const TrajParams& params) {
 }
 
 }  // namespace drolib
-
-

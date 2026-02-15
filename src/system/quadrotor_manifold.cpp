@@ -1,7 +1,7 @@
 #include "drolib/system/quadrotor_manifold.hpp"
 
 namespace drolib {
-  
+
 QuadManifold::QuadManifold() {}
 
 QuadManifold::QuadManifold(const QuadParams params) : params_(params) {
@@ -39,12 +39,12 @@ bool QuadManifold::toStateWithTrueYaw(const double t, const PVAJS &input, const 
   // Eigen::Ref<Eigen::Vector4d> quat = output.state.qx;
   Eigen::Ref<Eigen::Vector3d> tau = output.state.tau;
 
-  Eigen::Vector3d& omgInput = output.input.omega; 
-  Eigen::Vector4d& thrusts = output.input.thrusts; 
-  double& collective_thrust = output.input.collective_thrust; 
+  Eigen::Vector3d& omgInput = output.input.omega;
+  Eigen::Vector4d& thrusts = output.input.thrusts;
+  double& collective_thrust = output.input.collective_thrust;
 
   pos = input.col(0);
-  vel = input.col(1);  
+  vel = input.col(1);
   acc = input.col(2);
   jer = input.col(3);
   sna = input.col(4);
@@ -150,11 +150,11 @@ double QuadManifold::computeRobustSimplePenalityCost(
   double omg_xy_sqr{0.0}, thrust{0.0};
 
   // Eigen::Vector3d pos = pvajs.col(0);
-  // Eigen::Vector3d vel = pvajs.col(1);  
+  // Eigen::Vector3d vel = pvajs.col(1);
   Eigen::Vector3d acc = pvajs.col(2);
   Eigen::Vector3d jer = pvajs.col(3);
   Eigen::Vector3d sna = pvajs.col(4);
-  
+
   a0 = acc(0);
   a1 = acc(1);
   a2 = acc(2);
@@ -200,7 +200,7 @@ double QuadManifold::computeRobustSimplePenalityCost(
   zB2 = alpha2 / alpha_norm_1;
   zB << zB0, zB1, zB2;
 
-  thrust = zB0 * params_.mass * a0 
+  thrust = zB0 * params_.mass * a0
                     + zB1 * params_.mass * a1
                     + zB2 * params_.mass * (a2 + G);
   zB2_1 = zB2 + 1;
@@ -315,7 +315,7 @@ double QuadManifold::computeRobustSimplePenalityCost(
     d_Cw_j = gradOmg.transpose() * (mat_w_dzB * mat_dzB_j);
 
     d_Cf_a = gradThrust * params_.mass * zB.transpose();
-    
+
     //TODO: no rotation in penality
     gradTotalAcc = d_Cw_a + d_Cf_a;
     // gradTotalAcc = d_Cq_a + d_Cw_a + d_Cf_a;
@@ -329,7 +329,7 @@ double QuadManifold::computeRobustSimplePenalityCost(
     // gradOmgXYSqr = 0.0;
     // gradOmgZSqr = 0.0;
     // gradThrust = 0.0;
-    
+
     double vio, vPena, vPenaD;
 
     //Cost 1: omg_xy_sqr
@@ -358,7 +358,7 @@ double QuadManifold::computeRobustSimplePenalityCost(
     Eigen::Vector3d d_Cwxysqr_a = d_c_a * d_Cwxysqr_c;
     //Cost 3
     d_Cf_a = gradThrust * params_.mass * zB.transpose();
-    
+
     gradTotalAcc = d_Cwxysqr_a + d_Cf_a;
     gradTotalJer = d_Cwxysqr_j;
   }
@@ -376,11 +376,11 @@ double QuadManifold::computeRobustPenalityCost(
 /*********Compute quadrotor full states*********/
   double omg_xy_sqr{0.0}, thrust{0.0};
   Eigen::Vector3d pos = pvajs.col(0);
-  Eigen::Vector3d vel = pvajs.col(1);  
+  Eigen::Vector3d vel = pvajs.col(1);
   Eigen::Vector3d acc = pvajs.col(2);
   Eigen::Vector3d jer = pvajs.col(3);
   Eigen::Vector3d sna = pvajs.col(4);
-  
+
   a0 = acc(0);
   a1 = acc(1);
   a2 = acc(2);
@@ -426,7 +426,7 @@ double QuadManifold::computeRobustPenalityCost(
   zB2 = alpha2 / alpha_norm_1;
   zB << zB0, zB1, zB2;
 
-  thrust = zB0 * params_.mass * a0 
+  thrust = zB0 * params_.mass * a0
                     + zB1 * params_.mass * a1
                     + zB2 * params_.mass * (a2 + G);
   zB2_1 = zB2 + 1;
@@ -526,7 +526,7 @@ double QuadManifold::computeRobustPenalityCost(
     omg_xy_sqr = c_inv_2 * (j0 * j0 + j1 * j1);
   }
 
-  
+
 /*********Compute costs and their gradients*********/
   gradTotalPos.setZero();
   gradTotalVel.setZero();
@@ -536,6 +536,7 @@ double QuadManifold::computeRobustPenalityCost(
 
   double cost{0.0};
   if (fabs(zB2_1) > 0.001) {
+    // std::cout << "Adding Penalties!";
     Eigen::Vector3d gradPos = Eigen::Vector3d::Zero();
     Eigen::Vector3d gradVel = Eigen::Vector3d::Zero();
     Eigen::Vector3d gradOmg = Eigen::Vector3d::Zero();
@@ -544,6 +545,7 @@ double QuadManifold::computeRobustPenalityCost(
 
     cost += addVelocityPenalities(vel, params, gradVel);
     cost += addRotationPenalities(quat_tmp, params, gradQuat);
+    // std::cout << addRotationPenalities(quat_tmp, params, gradQuat) << "\n"
     cost += addBodyratePenalities(omg_tmp, params, gradOmg);
     cost += addThrustsPenalities(thrusts_tmp, params, gradThrusts);
     cost += addBoundaryPenalities(pos, params, gradPos);
@@ -560,7 +562,7 @@ double QuadManifold::computeRobustPenalityCost(
     // gradOmgXYSqr = 0.0;
     // gradOmgZSqr = 0.0;
     // gradThrust = 0.0;
-    
+
     double vio, vPena, vPenaD;
     //Cost 1: omg_xy_sqr
     vio = omg_xy_sqr - params.maxOmgXYSqr;
@@ -583,7 +585,7 @@ double QuadManifold::computeRobustPenalityCost(
     Eigen::Vector3d d_Cwxysqr_a = d_c_a * d_Cwxysqr_c;
     //Cost 3
     d_Cf_a = gradThrust * params_.mass * zB.transpose();
-    
+
     gradTotalAcc = d_Cwxysqr_a + d_Cf_a;
     gradTotalJer = d_Cwxysqr_j;
   }
@@ -592,14 +594,14 @@ double QuadManifold::computeRobustPenalityCost(
   return cost;
 }
 
-double QuadManifold::addThrustPenality(const double thrust, 
+double QuadManifold::addThrustPenality(const double thrust,
                                   const TrajParams &params,
                                   double& gradThrust) const {
-  double penalty{0.0};     
+  double penalty{0.0};
   gradThrust = 0.0;
   if (params.weightThr <= 1.0e-6) {
     return penalty;
-  }  
+  }
   // thrust variable here is already mass-normalized and therefore it needs to be scaled by a mass factor
   double v, vPena, vPenaD;
   v = (thrust - params.collectivtThrMean) * (thrust - params.collectivtThrMean) - params.collectivtThrRadiSqr;
@@ -608,10 +610,10 @@ double QuadManifold::addThrustPenality(const double thrust,
     penalty += params.weightThr * vPena;
   }
 
-  return penalty;                       
+  return penalty;
 }
 
-double QuadManifold::addThrustsPenalities(const Eigen::Vector4d &thrusts, 
+double QuadManifold::addThrustsPenalities(const Eigen::Vector4d &thrusts,
                                   const TrajParams &params,
                                   Eigen::Ref<Eigen::Vector4d> gradThrusts) const {
   double penalty{0.0};
@@ -619,7 +621,7 @@ double QuadManifold::addThrustsPenalities(const Eigen::Vector4d &thrusts,
 
   if (params.weightThr <= 1.0e-6) {
     return penalty;
-  }  
+  }
 
   double v, vPena, vPenaD;
   for (size_t i{0}; i < 4; ++i) {
@@ -632,7 +634,7 @@ double QuadManifold::addThrustsPenalities(const Eigen::Vector4d &thrusts,
   return penalty;
 }
 
-double QuadManifold::addVelocityPenalities(const Eigen::Vector3d &vel, 
+double QuadManifold::addVelocityPenalities(const Eigen::Vector3d &vel,
                                   const TrajParams &params,
                                   Eigen::Ref<Eigen::Vector3d> gradVel) const {
   double penalty{0.0};
@@ -640,7 +642,7 @@ double QuadManifold::addVelocityPenalities(const Eigen::Vector3d &vel,
 
   if (params.weightVel <= 1.0e-6) {
     return penalty;
-  }                                 
+  }
 
   double v, vPena, vPenaD;
   v = vel.squaredNorm() - params.maxVelSqr;
@@ -651,7 +653,7 @@ double QuadManifold::addVelocityPenalities(const Eigen::Vector3d &vel,
   return penalty;
 }
 
-double QuadManifold::addBodyratePenalities(const Eigen::Vector3d &omg, 
+double QuadManifold::addBodyratePenalities(const Eigen::Vector3d &omg,
                                   const TrajParams &params,
                                   Eigen::Ref<Eigen::Vector3d> gradOmg) const {
   double penalty{0.0};
@@ -659,7 +661,7 @@ double QuadManifold::addBodyratePenalities(const Eigen::Vector3d &omg,
 
   if (params.weightOmg <= 1.0e-6) {
     return penalty;
-  }  
+  }
 
   double vxy, vz, vPena, vPenaD;
   vxy = omg.head<2>().squaredNorm() - params.maxOmgXYSqr;
@@ -676,30 +678,33 @@ double QuadManifold::addBodyratePenalities(const Eigen::Vector3d &omg,
   return penalty;
 }
 
-double QuadManifold::addRotationPenalities(const Eigen::Vector4d &quat, 
+double QuadManifold::addRotationPenalities(const Eigen::Vector4d &quat,
                                   const TrajParams &params,
                                   Eigen::Ref<Eigen::Vector4d> gradQuat) const {
+  // static int activations = 0;
   double penalty{0.0};
   gradQuat.setZero();
 
   if (params.weightRot <= 1.0e-6) {
     return penalty;
-  }  
+  }
 
   double v, vPena, vPenaD;
   const double cosAng = 1.0 - 2.0 * (quat(1) * quat(1) + quat(2) * quat(2));
   v = std::acos(cosAng) - params.maxTiltedAngle;
+  // std::cout << "v: " << v << "; mu: " << params.smoothingEps << "\n";
   if (smoothedL1(v, params.smoothingEps, vPena, vPenaD)) {
     gradQuat += params.weightRot * vPenaD /  sqrt(1.0 - cosAng * cosAng) * 4.0 * Eigen::Vector4d(0.0, quat(1), quat(2), 0.0);
     penalty += params.weightRot * vPena;
+    // activations++;
   }
-
+  // std::cout << "activations: " << activations << "\n";
   return penalty;
 }
 
 
 
-double QuadManifold::addBoundaryPenalities(const Eigen::Vector3d &pos, 
+double QuadManifold::addBoundaryPenalities(const Eigen::Vector3d &pos,
                                       const TrajParams &params,
                                       Eigen::Ref<Eigen::Vector3d> gradPos) const {
   double penalty{0.0};
@@ -707,7 +712,7 @@ double QuadManifold::addBoundaryPenalities(const Eigen::Vector3d &pos,
 
   if (params.weightPos <= 1.0e-6) {
     return penalty;
-  }                                 
+  }
 
   double v, vPena, vPenaD;
   // Minimum boundary
@@ -794,12 +799,12 @@ bool QuadManifold::toStateWithTiltYaw(const double t, const PVAJS &input, const 
   Eigen::Ref<Eigen::Vector4d> quat = output.state.qx;
   Eigen::Ref<Eigen::Vector3d> tau = output.state.tau;
 
-  Eigen::Vector3d& omgInput = output.input.omega; 
-  Eigen::Vector4d& thrusts = output.input.thrusts; 
-  double& thrust = output.input.collective_thrust; 
+  Eigen::Vector3d& omgInput = output.input.omega;
+  Eigen::Vector4d& thrusts = output.input.thrusts;
+  double& thrust = output.input.collective_thrust;
 
   pos = input.col(0);
-  vel = input.col(1);  
+  vel = input.col(1);
   acc = input.col(2);
   jer = input.col(3);
   sna = input.col(4);
@@ -859,7 +864,7 @@ bool QuadManifold::toStateWithTiltYaw(const double t, const PVAJS &input, const 
   // collective thrust: thrust-mass ratio
   // thrust = alpha_norm_1;
 
-  thrust = zB0 * params_.mass * a0 
+  thrust = zB0 * params_.mass * a0
               + zB1 * params_.mass * a1
               + zB2 * params_.mass * (a2 + G);
 
@@ -1044,7 +1049,7 @@ void QuadManifold::backPropagate(
 void QuadManifold::backPropagateSimple(
   const Eigen::Vector4d &gradQuat,
   const Eigen::Vector3d &gradOmg,
-  const double gradThr, 
+  const double gradThr,
   Eigen::Vector3d &gradTotalAcc,
   Eigen::Vector3d &gradTotalJer) const {
 
@@ -1055,7 +1060,7 @@ void QuadManifold::backPropagateSimple(
   d_Cw_j = gradOmg.transpose() * (mat_w_dzB * mat_dzB_j);
 
   d_Cf_a = gradThr * params_.mass * zB.transpose();
-  
+
   //TODO: no rotation in penality
   gradTotalAcc = d_Cw_a + d_Cf_a;
   gradTotalJer = d_Cw_j;

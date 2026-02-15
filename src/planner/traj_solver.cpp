@@ -11,7 +11,7 @@ bool TrajSolver::setInitialGuess(const TrajData &tdata) {
 }
 
 bool TrajSolver::solve(const PVAJ &initState,
-            const PVAJ &endState, 
+            const PVAJ &endState,
             const QuadManifold &quad,
             const TrajParams &tparams,
             const LbfgsParams& lbfgs) {
@@ -25,8 +25,8 @@ bool TrajSolver::solve(const PVAJ &initState,
     return false;
   }
 
-  this->quad = quad; 
-  this->tparams = tparams; 
+  this->quad = quad;
+  this->tparams = tparams;
 
   minco.setConditions(initState, endState, data.totalPieces);
 
@@ -92,7 +92,7 @@ double TrajSolver::addEnergyCost(const MincoSnap &minco,
   double cost{0.0};
   if (params.weightEnergy <= 1.0e-6) {
     return cost;
-  }                           
+  }
   minco.getEnergyWithGrads(cost, gradC, gradT);
   cost *= params.weightEnergy;
   gradC *= params.weightEnergy;
@@ -111,7 +111,7 @@ double TrajSolver::addRobustPenaltyCost(const Eigen::VectorXd &T,
                                     const Eigen::MatrixX3d &coeffs,
                                     const QuadManifold &quad,
                                     AngleBase* yawTilt,
-                                    const TrajParams &params,       
+                                    const TrajParams &params,
                                     Eigen::MatrixX3d &gradC,
                                     Eigen::VectorXd &gradT) {
   double cost{0.0};
@@ -199,14 +199,14 @@ double TrajSolver::addRobustPenaltyCost(const Eigen::VectorXd &T,
     }
   }
 
-  return cost;                         
+  return cost;
 }
 
 double TrajSolver::addPenaltyCost(const Eigen::VectorXd &T,
                                     const Eigen::MatrixX3d &coeffs,
                                     const QuadManifold &quad,
                                     AngleBase* yawTilt,
-                                    const TrajParams &params,       
+                                    const TrajParams &params,
                                     Eigen::MatrixX3d &gradC,
                                     Eigen::VectorXd &gradT) {
   double cost{0.0};
@@ -305,14 +305,14 @@ double TrajSolver::addPenaltyCost(const Eigen::VectorXd &T,
   return cost;
 }
 
-double TrajSolver::addThrustPenality(const double thrust, 
+double TrajSolver::addThrustPenality(const double thrust,
                                   const TrajParams &params,
                                   Eigen::Ref<Eigen::Matrix<double, 1, 1>> gradThrust) {
-  double penalty{0.0};     
+  double penalty{0.0};
   gradThrust.setZero();
   if (params.weightThr <= 1.0e-6) {
     return penalty;
-  }  
+  }
 
   double v, vPena, vPenaD;
   v = (thrust - params.collectivtThrMean) * (thrust - params.collectivtThrMean) - params.collectivtThrRadiSqr;
@@ -321,10 +321,10 @@ double TrajSolver::addThrustPenality(const double thrust,
     penalty += params.weightThr * vPena;
   }
 
-  return penalty;                       
+  return penalty;
 }
 
-double TrajSolver::addThrustsPenalities(const Eigen::Vector4d &thrusts, 
+double TrajSolver::addThrustsPenalities(const Eigen::Vector4d &thrusts,
                                   const TrajParams &params,
                                   Eigen::Ref<Eigen::Vector4d> gradThrusts) {
   double penalty{0.0};
@@ -332,7 +332,7 @@ double TrajSolver::addThrustsPenalities(const Eigen::Vector4d &thrusts,
 
   if (params.weightThr <= 1.0e-6) {
     return penalty;
-  }  
+  }
 
   double v, vPena, vPenaD;
   for (size_t i{0}; i < 4; ++i) {
@@ -345,7 +345,7 @@ double TrajSolver::addThrustsPenalities(const Eigen::Vector4d &thrusts,
   return penalty;
 }
 
-double TrajSolver::addVelocityPenalities(const Eigen::Vector3d &vel, 
+double TrajSolver::addVelocityPenalities(const Eigen::Vector3d &vel,
                                   const TrajParams &params,
                                   Eigen::Ref<Eigen::Vector3d> gradVel) {
   double penalty{0.0};
@@ -353,7 +353,7 @@ double TrajSolver::addVelocityPenalities(const Eigen::Vector3d &vel,
 
   if (params.weightVel <= 1.0e-6) {
     return penalty;
-  }                                 
+  }
 
   double v, vPena, vPenaD;
   v = vel.squaredNorm() - params.maxVelSqr;
@@ -364,7 +364,7 @@ double TrajSolver::addVelocityPenalities(const Eigen::Vector3d &vel,
   return penalty;
 }
 
-// double TrajSolver::addBodyrateNormPenality(const double bodyrateNormSqrXY, 
+// double TrajSolver::addBodyrateNormPenality(const double bodyrateNormSqrXY,
 //                                            const double bodyrateNormSqrZ,
 //                                            const TrajParams &params,
 //                                            Eigen::Ref<Eigen::Vector3d> gradOmg) {
@@ -373,7 +373,7 @@ double TrajSolver::addVelocityPenalities(const Eigen::Vector3d &vel,
 
 //   if (params.weightOmg <= 1.0e-6) {
 //     return penalty;
-//   }  
+//   }
 
 //   double vxy, vz, vPena, vPenaD;
 //   vxy = bodyrateNormSqrXY - params.maxOmgXYSqr;
@@ -391,7 +391,7 @@ double TrajSolver::addVelocityPenalities(const Eigen::Vector3d &vel,
 // }
 
 
-double TrajSolver::addBodyratePenalities(const Eigen::Vector3d &omg, 
+double TrajSolver::addBodyratePenalities(const Eigen::Vector3d &omg,
                                   const TrajParams &params,
                                   Eigen::Ref<Eigen::Vector3d> gradOmg) {
   double penalty{0.0};
@@ -399,7 +399,7 @@ double TrajSolver::addBodyratePenalities(const Eigen::Vector3d &omg,
 
   if (params.weightOmg <= 1.0e-6) {
     return penalty;
-  }  
+  }
 
   double vxy, vz, vPena, vPenaD;
   vxy = omg.head<2>().squaredNorm() - params.maxOmgXYSqr;
@@ -416,7 +416,7 @@ double TrajSolver::addBodyratePenalities(const Eigen::Vector3d &omg,
   return penalty;
 }
 
-double TrajSolver::addRotationPenalities(const Eigen::Vector4d &quat, 
+double TrajSolver::addRotationPenalities(const Eigen::Vector4d &quat,
                                   const TrajParams &params,
                                   Eigen::Ref<Eigen::Vector4d> gradQuat) {
   double penalty{0.0};
@@ -424,7 +424,7 @@ double TrajSolver::addRotationPenalities(const Eigen::Vector4d &quat,
 
   if (params.weightRot <= 1.0e-6) {
     return penalty;
-  }  
+  }
 
   double v, vPena, vPenaD;
   const double cosAng = 1.0 - 2.0 * (quat(1) * quat(1) + quat(2) * quat(2));
@@ -437,7 +437,7 @@ double TrajSolver::addRotationPenalities(const Eigen::Vector4d &quat,
   return penalty;
 }
 
-double TrajSolver::addBoundaryPenalities(const Eigen::Vector3d &pos, 
+double TrajSolver::addBoundaryPenalities(const Eigen::Vector3d &pos,
                                       const TrajParams &params,
                                       Eigen::Ref<Eigen::Vector3d> gradPos) {
   double penalty{0.0};
@@ -445,7 +445,7 @@ double TrajSolver::addBoundaryPenalities(const Eigen::Vector3d &pos,
 
   if (params.weightPos <= 1.0e-6) {
     return penalty;
-  }                                 
+  }
 
   double v, vPena, vPenaD;
   // Minimum boundary
@@ -549,7 +549,7 @@ void TrajSolver::backPropagateT(const Eigen::VectorXd &K,
       gradK(i) = gradT(i) * (1.0 - K(i)) / (denSqrt * denSqrt);
     }
 
-    // gradK(i) = gradT(i) * 2.0 * K(i); 
+    // gradK(i) = gradT(i) * 2.0 * K(i);
   }
 
   return;
@@ -613,5 +613,5 @@ bool TrajSolver::smoothedL1(const double &x, const double &mu, double &f,
     return true;
   }
 }
-  
+
 }

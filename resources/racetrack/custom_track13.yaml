@@ -1,0 +1,115 @@
+initState:
+  pos: [1.6, 1.6, 0.1]
+  vel: [0, 0, 0]
+  acc: [0.0, 0.0, 0.0]
+  jer: [0.0, 0.0, 0.0]
+  rot: [1.0, 0.0, 0.0, 0.0]
+  cthrustmass: 9.81
+  euler: [0.0, 0.0, 0.0]
+  quat: [1, 0, 0, 0]
+endState:
+  pos: [-0.8, -0.8, 1.0]
+  vel: [0.0, 0.0, 0.0]
+  acc: [0.0, 0.0, 0.0]
+  jer: [0.0, 0.0, 0.0]
+  cthrustmass: 9.81
+  euler: [0.0, 0.0, 0.0]
+  rot: [1.0, 0.0, 0.0, 0.0]
+  quat: [1.0, 0.0, 0.0, 0.0]
+orders: [Gate1, Gate2, Gate3, Gate4]
+Gate1:
+  type: RectanglePrisma
+  name: vicon_gate
+  position: [1.2000000000000002, 1.2000000000000002, 1.0]
+  rpy: [0, -90, -161.565051177078]
+  width: 0.1
+  height: 0.1
+  marginW: 0.0
+  marginH: 0.0
+  length: 0.1
+  midpoints: 0
+  stationary: true
+Gate2:
+  type: RectanglePrisma
+  name: vicon_gate
+  position: [0.4, 1.2000000000000002, 1.0]
+  rpy: [0, -90, -90.0]
+  width: 0.1
+  height: 0.1
+  marginW: 0.0
+  marginH: 0.0
+  length: 0.1
+  midpoints: 0
+  stationary: true
+Gate3:
+  type: RectanglePrisma
+  name: vicon_gate
+  position: [1.2000000000000002, 0.4, 1.0]
+  rpy: [0, -90, -108.43494882292201]
+  width: 0.1
+  height: 0.1
+  marginW: 0.0
+  marginH: 0.0
+  length: 0.1
+  midpoints: 0
+  stationary: true
+Gate4:
+  type: RectanglePrisma
+  name: vicon_gate
+  position: [0.0, 0.0, 1.0]
+  rpy: [0, -90, -149.03624346792648]
+  width: 0.1
+  height: 0.1
+  marginW: 0.0
+  marginH: 0.0
+  length: 0.1
+  midpoints: 0
+  stationary: true
+Gate5:
+  type: RectanglePrisma
+  name: vicon_gate
+  position: [-1.2800000000000002, 0.32000000000000006, 1.2]
+  rpy: [0, -90, 90.0]
+  width: 0.1
+  height: 0.1
+  marginW: 0.0
+  marginH: 0.0
+  length: 0.1
+  midpoints: 0
+  stationary: true
+Gate6:
+  type: RectanglePrisma
+  name: vicon_gate
+  position: [1.2800000000000002, 0.6400000000000001, 1.3]
+  rpy: [0, -90, 90.0]
+  width: 0.1
+  height: 0.1
+  marginW: 0.0
+  marginH: 0.0
+  length: 0.1
+  midpoints: 0
+  stationary: true
+Gate7:
+  type: RectanglePrisma
+  name: vicon_gate
+  position: [-1.2800000000000002, 0.9600000000000002, 1.4]
+  rpy: [0, -90, 170.2724214485984]
+  width: 0.1
+  height: 0.1
+  marginW: 0.0
+  marginH: 0.0
+  length: 0.1
+  midpoints: 0
+  stationary: true
+Gate8:
+  type: RectanglePrisma
+  name: vicon_gate
+  position: [0.24576000000000003, -0.24576000000000003, 1.0]
+  rpy: [0, -90, -142.25319461272534]
+  width: 0.1
+  height: 0.1
+  marginW: 0.0
+  marginH: 0.0
+  length: 0.1
+  midpoints: 0
+  stationary: true

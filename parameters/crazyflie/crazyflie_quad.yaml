@@ -1,25 +1,23 @@
-# mass:               0.85
-# gravity:            9.8066
-# inertia:            [0.001, 0.001, 0.0017]
-# armLength:          0.15
-# beta:               45.0
-# torCoeff:           0.05
+# mass:               0.041 #0.041
+# gravity:            9.81
+# inertia:            [0.000034, 0.000034, 0.000058]
+# armLength:          0.050                                  #Obtained from CrazySim
+# beta:               45.0                                    #Angle from front to arm
+# torCoeff:           0.0056928                               #Obtained from Firmware
 #
-# # T_bm: [[1.0, 1.0, 1.0, 1.0], [0.15, -0.15, -0.15, 0.15],[-0.15, -0.15, 0.15, 0.15],[0.05, -0.05, 0.05, -0.05]]
-#
-# # TOGT refinement
-# thrust_min: 0.0
-# thrust_max: 6.879   # max accel z: 24.46m/s^2
-# omega_max:  [15.0, 15.0, 3.0]         # [rad/s]
+# # TOGT refinement: Used only within the togt_refinement.py code?
+# thrust_min: 0.00
+# thrust_max: 0.15 #Permotor, absolute limit
+# omega_max:  [4.0, 4.0, 4.0]
 
-mass:               0.028
+mass:               0.030                              #Custom
 gravity:            9.81
-inertia:            [0.000016572, 0.000016572, 0.000029262]
-armLength:          0.046
-beta:               45.0
-torCoeff:           0.005964552
+inertia:            [0.000023951, 0.000023951, 0.000032347] #Obtained from CrazySim
+armLength:          0.046                                   #Obtained from CrazySim
+beta:               45.0                                    #Angle from front to arm
+torCoeff:           0.005964552                             #Obtained from fimrware
 
-# TOGT refinement
-thrust_min: 0.0
+# TOGT refinement: Used only within the togt_refinement.py code?
+thrust_min: 0.001
 thrust_max: 0.125
-omega_max:  [1.0, 1.0, 1.0]
+omega_max:  [2.0, 2.0, 1.0]

@@ -1,10 +1,10 @@
 # Refine
-piecesPerSegment:   5
+piecesPerSegment:   20
 speedGuess:         1.0
-maxVelNorm:         1.5
+maxVelNorm:         2.0
 maxOmgXY:           2.0
 maxOmgZ:            1.0
-maxTiltedAngle:     0.785
+maxTiltedAngle:     0.78
 maxThr:             0.125
 minThr:             0.001
 
@@ -25,4 +25,33 @@ checkTimeSec:       0.05
 
 boundX:             [-5, 5]
 boundY:             [-5, 5]
-boundZ:             [0.1, 5]
+boundZ:             [0.2, 5]
+
+# # Refine
+# piecesPerSegment:   5
+# speedGuess:         1.0
+# maxVelNorm:         1.5
+# maxOmgXY:           2.0
+# maxOmgZ:            1.0
+# maxTiltedAngle:     1.0
+# maxThr:             0.125
+# minThr:             0.001
+#
+# weightTime:         1.0
+# weightEnergy:       1.0
+# weightPos:          1.0
+# weightVel:          1.0
+# weightOmg:          1.0
+# weightRot:          1.0
+# weightThr:          1.0
+# smoothingEps:       1.0e-2
+# numConstPena:       8
+#
+# dynamicConstCheck:  false
+# minNumCheck:        8
+# maxNumCheck:        32
+# checkTimeSec:       0.05
+#
+# boundX:             [-5, 5]
+# boundY:             [-5, 5]
+# boundZ:             [0.1, 5]

@@ -1,7 +1,7 @@
 # Initialize
 piecesPerSegment:   1
 speedGuess:         1.0
-maxVelNorm:         1.5
+maxVelNorm:         20.0
 maxOmgXY:           2.0
 maxOmgZ:            1.0
 maxTiltedAngle:     1.57
